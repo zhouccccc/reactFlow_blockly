@@ -1,0 +1,264 @@
+@block-width: 100px;
+@block-height: 40px;
+@handle_size: 9px;
+
+.baseSelector {
+  &:active {
+    cursor: grabbing;
+  }
+
+  span[role='img'] {
+    font-size: 18px;
+  }
+
+  span[role='label'] {
+    font-size: 14px;
+  }
+
+  // Handle默认偏移
+  div[class~='react-flow__handle-bottom'] {
+    bottom: -18px
+  }
+
+  div[class~='react-flow__handle-top'] {
+    top: -1px
+  }
+}
+
+.baseRectStyle {
+  min-width: @block-width;
+  min-height: @block-height;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border: 2px solid #777777;
+  cursor: pointer;
+  gap: 8px;
+  padding: 0 10px;
+
+  .baseSelector();
+}
+
+.selectBorder {
+  height: 100%;
+  width: 100%;
+  border: 2px solid red;
+  position: absolute;
+  top: 0;
+  left: -2px;
+  border-radius: 5px;
+  transform: scale(1.2, 1.4);
+}
+
+// 开始节点
+.startNode {
+  position: relative;
+
+  :global {
+    div[class~='react-flow__handle-bottom'] {
+      bottom: -12px;
+    }
+  }
+}
+
+
+.startLabel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+}
+
+
+// 目标任务
+.targetTaskNode {
+  .baseRectStyle();
+
+  @color: #1890ff;
+  @background: @{color}26;
+
+  border: 2px solid #1890ff;
+  position: relative;
+  background: @background;
+
+
+  span[role='img'] {
+    color: @color;
+  }
+
+  :global {
+    .react-flow__handle {
+      border-top-color: @color !important;
+    }
+
+    .react-flow .react-flow__nodes div[class~='react-flow__handle-bottom'] {
+      bottom: -17px
+    }
+
+    .react-flow .react-flow__nodes div[class~='react-flow__handle-top'] {
+      top: -2px
+    }
+  }
+}
+
+
+// 通知事件
+.notification {
+  .baseRectStyle();
+
+  @color: #35ce15;
+  @background: @{color}26;
+
+  border: 2px solid @color;
+  background: @background;
+
+  span[role='img'] {
+    color: @color;
+  }
+
+  :global {
+    .react-flow__handle {
+      border-top-color: @color !important;
+    }
+  }
+}
+
+// 更改变量
+.updateVariablesNode {
+  .baseRectStyle();
+
+  @color: #ff4c4c;
+  @background: @{color}26;
+
+  border: 2px solid @color;
+  background: @background;
+
+  :global {
+    .ant-space > .ant-space-item > span[role='img'] {
+      color: @color;
+    }
+
+    .react-flow__handle {
+      border-top-color: @color !important;
+    }
+  }
+}
+
+// 切换任务
+.switchTaskNode {
+  .baseRectStyle();
+
+  @color: #FF9900;
+  @background: @{color}26;
+
+  border: 2px solid @color;
+  background: @background;
+
+  span[role='img'] {
+    color: @color;
+  }
+
+  :global {
+    .react-flow__handle {
+      border-top-color: @color !important;
+    }
+  }
+}
+
+// 待命
+.standbyNode {
+  .baseRectStyle();
+
+  @color: #800080;
+  @background: @{color}26;
+
+  border: 2px solid @color;
+  background: @background;
+
+  span[role='img'] {
+    color: @color;
+  }
+
+  :global {
+    .react-flow__handle {
+      border-top-color: @color !important;
+    }
+  }
+}
+
+// 条件优化器
+
+.conditionOptimizerNode {
+  .baseRectStyle();
+
+  @color: #136ad5;
+  @background: @{color}26;
+
+  border: 2px solid @color;
+  background: @background;
+
+  span[role='img'] {
+    color: @color;
+  }
+
+  :global {
+    .react-flow__handle {
+      border-top-color: @color !important;
+    }
+  }
+}
+
+
+// 条件判断
+.conditionContainer {
+  @color: #777777;
+
+  :global {
+    div[class~='react-flow__handle-top'] {
+      border-top-color: #777777;
+      top: -3px;
+    }
+
+    div[class~='react-flow__handle-bottom'] {
+      border-top-color: @color;
+      bottom: -17px;
+    }
+
+    div[class~='react-flow__handle-right'] {
+      border-top: @handle_size solid transparent;
+      border-right: @handle_size solid transparent;
+      border-left: @handle_size solid @color;
+      border-bottom: @handle_size solid transparent;
+      right: -16px;
+    }
+  }
+}
+
+.condition {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .baseSelector();
+}
+
+
+.conditionLabel {
+  top: 0;
+  left: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+}

@@ -1,0 +1,94 @@
+@handle_size: 9px;
+
+.app {
+  height: 100%;
+  display: flex;
+}
+
+.left {
+  padding-top: 20px;
+  flex: 0 0 150px;
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 20px;
+  align-items: center;
+}
+
+
+.canvas {
+  position: relative;
+  flex: 1;
+  background: #eeeeee82;
+
+
+  :global {
+    .react-flow__handle {
+      position: absolute;
+      width: 0;
+      height: 0;
+      border-top: @handle_size solid #777777;
+      border-right: @handle_size solid transparent;
+      border-left: @handle_size solid transparent;
+      border-bottom: @handle_size solid transparent;
+      background: transparent;
+      min-width: 0;
+      min-height: 0;
+      border-radius: 0;
+    }
+
+    // 修改Handle尺寸和层级
+    .react-flow .react-flow__nodes div[class~="react-flow__handle"] {
+      z-index: 10;
+    }
+  }
+}
+
+
+.edgeButton {
+  width: 20px;
+  height: 20px;
+  background: #eee;
+  border: 1px solid #fff;
+  cursor: pointer;
+  border-radius: 50%;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.edgeButtonContainer {
+  background: transparent;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 40px;
+}
+
+.conditionButtonContainer {
+  .edgeButtonContainer();
+
+
+}
+
+.conditionDropdownContent {
+  background: #fff;
+  box-shadow: 0 3px 6px -4px rgb(0 0 0 / 12%), 0 6px 16px 0 rgb(0 0 0 / 8%),
+  0 9px 28px 8px rgb(0 0 0 / 5%);
+
+  :global{
+    .ant-dropdown-menu {
+      box-shadow: none;
+    }
+  }
+}
+
+.conditionLabelStyle{
+  position: absolute;
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  background: #1890ff;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
