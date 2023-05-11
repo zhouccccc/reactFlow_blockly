@@ -3,15 +3,12 @@ import {getSmoothStepPath, useReactFlow} from 'reactflow';
 import styles from './app.module.less'
 
 import './index.css';
-import {CloseOutlined, DeleteOutlined, LinkOutlined, MoreOutlined} from "@ant-design/icons";
+import {DeleteOutlined} from "@ant-design/icons";
 import {Button} from "antd";
 
 const foreignObjectSize = 40;
 
-const onEdgeClick = (evt, id) => {
-    evt.stopPropagation();
-    alert(`remove ${id}`);
-};
+
 
 export default function ButtonEdge(edgeEntity) {
 
@@ -71,7 +68,7 @@ export default function ButtonEdge(edgeEntity) {
                 requiredExtensions="http://www.w3.org/1999/xhtml"
             >
                 <div className={styles.edgeButtonContainer} onClick={remove}>
-                    <Button danger type={'primary'} shape="circle" size="small" icon={<CloseOutlined />} />
+                    <Button type={'primary'} shape="circle" size="small" icon={<DeleteOutlined />} />
                 </div>
             </foreignObject>
         </>

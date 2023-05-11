@@ -1,14 +1,14 @@
 import React, {memo, useRef} from 'react';
-import style from './nodes.module.less';
 import {Handle, Position} from 'reactflow';
 import {HandleType} from '../nodeTypes.js';
+import style from './nodes.module.less';
 import {TaskFlowNodeType} from '../config.js';
 
 const strokeWidth = 1;
 const bottomHandleWidth = 18;
 const bottomHandleHeight = 18;
 
-const SwitchTaskDnd = (props) => {
+const PredecessorTask = (props) => {
   const {onDragStart} = props;
 
   /**
@@ -17,30 +17,28 @@ const SwitchTaskDnd = (props) => {
    */
   const divRef = useRef(null);
 
-  return (
-      <div
-          draggable
-          ref={divRef}
-          className={style.switchTaskNode}
-          onDragStart={(event) => {
-            // 鼠标的坐标
-            const {clientX, clientY} = event;
-            // 节点在Aside区域的坐标
-            const {x, y} = divRef.current.getBoundingClientRect();
-            const offsetX = clientX - x;
-            const offsetY = clientY - y;
-            onDragStart(event,
-                {type: SwitchTaskNodeType, label: '切换任务', offsetX, offsetY});
-          }}
-      >
-        <span role={'label'}>切换任务</span>
-      </div>
-
-  );
+  return (<div
+      draggable
+      ref={divRef}
+      className={style.preTask}
+      onDragStart={(event) => {
+        // 鼠标的坐标
+        const {clientX, clientY} = event;
+        // 节点在Aside区域的坐标
+        const {x, y} = divRef.current.getBoundingClientRect();
+        const offsetX = clientX - x;
+        const offsetY = clientY - y;
+        onDragStart(event, {
+          type: PredecessorTaskNodeType, label: '前置任务', offsetX, offsetY,
+        });
+      }}
+  >
+    <span role={'label'}>前置任务</span>
+  </div>);
 };
-export default memo(SwitchTaskDnd);
+export default memo(PredecessorTask);
 
-const SwitchTaskNode = (nodeEntity) => {
+const PredecessorTaskNode = (nodeEntity) => {
   const {data, selected} = nodeEntity;
 
   const path1 = `
@@ -56,7 +54,7 @@ const SwitchTaskNode = (nodeEntity) => {
     `;
 
   return (
-      <div className={style.switchTaskNode}>
+      <div className={style.preTask}>
         <Handle type={HandleType.target} position={Position.Bottom}>
           <svg width={bottomHandleWidth} height={bottomHandleHeight}
                xmlns="http://www.w3.org/2000/svg">
@@ -65,16 +63,11 @@ const SwitchTaskNode = (nodeEntity) => {
           </svg>
         </Handle>
         <span role={'label'}>{data.label}</span>
-        {
-            selected && (
-                <div role={'border'}/>
-            )
-        }
+        {selected && (<div role={'border'}></div>)}
       </div>
-
   );
 };
 
-const SwitchTaskNodeType = TaskFlowNodeType.SWITCH_TASK_NODE;
+const PredecessorTaskNodeType = TaskFlowNodeType.PREDECESSOR_TASK_NODE;
 
-export {SwitchTaskNode, SwitchTaskNodeType};
+export {PredecessorTaskNodeType, PredecessorTaskNode};

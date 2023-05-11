@@ -1,4 +1,4 @@
-@handle_size: 9px;
+@handle_size: 12px;
 
 .app {
   height: 100%;
@@ -23,17 +23,10 @@
 
   :global {
     .react-flow__handle {
-      position: absolute;
-      width: 0;
-      height: 0;
-      border-top: @handle_size solid #777777;
-      border-right: @handle_size solid transparent;
-      border-left: @handle_size solid transparent;
-      border-bottom: @handle_size solid transparent;
+      width: auto;
+      height: auto;
+      border: none;
       background: transparent;
-      min-width: 0;
-      min-height: 0;
-      border-radius: 0;
     }
 
     // 修改Handle尺寸和层级
@@ -43,21 +36,8 @@
   }
 }
 
-
-.edgeButton {
-  width: 20px;
-  height: 20px;
-  background: #eee;
-  border: 1px solid #fff;
-  cursor: pointer;
-  border-radius: 50%;
-  font-size: 12px;
-  line-height: 1;
-}
-
 .edgeButtonContainer {
   background: transparent;
-  width: 40px;
   height: 40px;
   display: flex;
   justify-content: center;
@@ -65,25 +45,7 @@
   min-height: 40px;
 }
 
-.conditionButtonContainer {
-  .edgeButtonContainer();
-
-
-}
-
-.conditionDropdownContent {
-  background: #fff;
-  box-shadow: 0 3px 6px -4px rgb(0 0 0 / 12%), 0 6px 16px 0 rgb(0 0 0 / 8%),
-  0 9px 28px 8px rgb(0 0 0 / 5%);
-
-  :global{
-    .ant-dropdown-menu {
-      box-shadow: none;
-    }
-  }
-}
-
-.conditionLabelStyle{
+.conditionLabelStyle {
   position: absolute;
   font-size: 16px;
   font-weight: 700;

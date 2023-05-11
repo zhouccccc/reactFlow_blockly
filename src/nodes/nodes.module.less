@@ -1,30 +1,22 @@
 @block-width: 100px;
 @block-height: 40px;
-@handle_size: 9px;
 
-.baseSelector {
-  &:active {
-    cursor: grabbing;
-  }
+// 节点Label颜色
+@label_color: #3d3d3d;
 
-  span[role='img'] {
-    font-size: 18px;
-  }
+// SVG边框颜色
+@border_color: #000000;
 
-  span[role='label'] {
-    font-size: 14px;
-  }
+// 前置条件颜色
+@condition_color: #76608A;
 
-  // Handle默认偏移
-  div[class~='react-flow__handle-bottom'] {
-    bottom: -18px
-  }
+// 子任务主色
+@subTask_color: #037ef3;
 
-  div[class~='react-flow__handle-top'] {
-    top: -1px
-  }
-}
+// 前置任务主色
+@preTask_color: #dbc203;
 
+// 节点形状
 .baseRectStyle {
   min-width: @block-width;
   min-height: @block-height;
@@ -33,210 +25,342 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  border: 2px solid #777777;
   cursor: pointer;
   gap: 8px;
   padding: 0 10px;
-
-  .baseSelector();
 }
 
-.selectBorder {
-  height: 100%;
-  width: 100%;
+// 选中边框
+.selectBorder(@height,@width,@top,@left) {
+  height: calc(100% + @height);
+  width: calc(100% + @width);
   border: 2px solid red;
   position: absolute;
-  top: 0;
-  left: -2px;
+  top: @top;
+  left: @left;
   border-radius: 5px;
-  transform: scale(1.2, 1.4);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+.handleCommon {
+  & > div[data-handlepos] {
+    & > svg {
+      pointer-events: none;
+
+      & > polygon {
+        stroke: @border_color;
+      }
+    }
+  }
 }
 
 // 开始节点
 .startNode {
-  position: relative;
-
-  :global {
-    div[class~='react-flow__handle-bottom'] {
-      bottom: -12px;
-    }
-  }
-}
-
-
-.startLabel {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 14px;
-}
-
-
-// 目标任务
-.targetTaskNode {
-  .baseRectStyle();
-
-  @color: #1890ff;
-  @background: @{color}26;
-
-  border: 2px solid #1890ff;
-  position: relative;
-  background: @background;
-
-
-  span[role='img'] {
-    color: @color;
-  }
-
-  :global {
-    .react-flow__handle {
-      border-top-color: @color !important;
-    }
-
-    .react-flow .react-flow__nodes div[class~='react-flow__handle-bottom'] {
-      bottom: -17px
-    }
-
-    .react-flow .react-flow__nodes div[class~='react-flow__handle-top'] {
-      top: -2px
-    }
-  }
-}
-
-
-// 通知事件
-.notification {
-  .baseRectStyle();
-
   @color: #35ce15;
-  @background: @{color}26;
+  @borderColor: @{color}26;
 
-  border: 2px solid @color;
-  background: @background;
+  // 形状
+  & > svg {
+    stroke: @border_color;
 
-  span[role='img'] {
-    color: @color;
+    & > ellipse {
+      stroke: @color;
+      fill: @borderColor;
+    }
   }
 
-  :global {
-    .react-flow__handle {
-      border-top-color: @color !important;
+  // handle
+  & > div[data-handlepos="bottom"] {
+    bottom: -10px;
+
+    & > svg {
+      stroke: @border_color;
+      pointer-events: none;
     }
+  }
+
+  & > div[role='border'] {
+    .selectBorder(15px, 12px, -8px, -10px)
+  }
+
+  & > .startLabel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    color: @label_color
+  }
+}
+
+// 子任务
+.subTaskNode {
+  @background: @{subTask_color}26;
+
+  .baseRectStyle();
+
+  border: 2px solid @subTask_color;
+  position: relative;
+  background: @background;
+
+  // handle common
+  .handleCommon();
+
+  // 上方handle
+  & > div[data-handlepos='top'] {
+    top: -10px;
+  }
+
+  // 下方handle
+  & > div[data-handleid="bottom_out"] {
+    bottom: -13px;
+  }
+
+  // 左侧handle:
+  // tips: 这个节点必须连接前置条件。 此时id的命名规则是: `@[节点类型]`
+  & > div[data-handleid="@prerequisiteNode"] {
+    left: -9px;
+    top: 22px;
+
+    & > svg {
+      transform: rotate(45deg);
+    }
+
+    & > svg > rect {
+      stroke: #000000;
+      fill: @condition_color;
+    }
+  }
+
+  & > div[role='border'] {
+    .selectBorder(23px, 23px, -15px, -18px)
+  }
+}
+
+// 前置任务
+.preTask {
+  @borderColor: #c6a200;
+
+  .baseRectStyle();
+
+  position: relative;
+  background: @preTask_color;
+  border: 2px solid @borderColor;
+  color: #ffffff;
+
+  & > div {
+    & > svg {
+      pointer-events: none;
+
+      & > polygon {
+        fill: @preTask_color;
+        stroke: @borderColor;
+      }
+    }
+  }
+
+  & > div[role='border'] {
+    .selectBorder(20px, 20px, -9px, -12px);
+  }
+
+  // 下方handle
+  & > div[data-handlepos='bottom'] {
+    bottom: -14px;
   }
 }
 
 // 更改变量
 .updateVariablesNode {
-  .baseRectStyle();
-
   @color: #ff4c4c;
   @background: @{color}26;
+
+  .baseRectStyle();
 
   border: 2px solid @color;
   background: @background;
 
-  :global {
-    .ant-space > .ant-space-item > span[role='img'] {
-      color: @color;
-    }
+  // handle common
+  .handleCommon();
 
-    .react-flow__handle {
-      border-top-color: @color !important;
-    }
+
+  // 上方handle
+  & > div[data-handlepos='top'] {
+    top: -10px;
+  }
+
+  // 下方handle
+  & > div[data-handlepos='bottom'] {
+    bottom: -13px;
+  }
+
+
+  & > div[role='border'] {
+    .selectBorder(23px, 17px, -15px, -11px)
   }
 }
 
 // 切换任务
 .switchTaskNode {
-  .baseRectStyle();
-
   @color: #FF9900;
   @background: @{color}26;
 
+  .baseRectStyle();
+
   border: 2px solid @color;
   background: @background;
 
-  span[role='img'] {
-    color: @color;
+  // handle common
+  .handleCommon();
+
+  // 下方handle
+  & > div[data-handlepos='bottom'] {
+    bottom: -14px;
   }
 
-  :global {
-    .react-flow__handle {
-      border-top-color: @color !important;
-    }
+  & > div[role='border'] {
+    .selectBorder(23px, 23px, -11px, -15px)
   }
 }
 
-// 待命
+// 车辆待命
 .standbyNode {
-  .baseRectStyle();
-
   @color: #800080;
   @background: @{color}26;
 
+  .baseRectStyle();
+
   border: 2px solid @color;
   background: @background;
 
-  span[role='img'] {
-    color: @color;
+
+  // handle common
+  .handleCommon();
+
+  // 下方handle
+  & > div[data-handlepos='bottom'] {
+    bottom: -14px;
   }
 
-  :global {
-    .react-flow__handle {
-      border-top-color: @color !important;
-    }
+  & > div[role='border'] {
+    .selectBorder(23px, 23px, -10px, -15px)
   }
 }
 
-// 条件优化器
-
-.conditionOptimizerNode {
-  .baseRectStyle();
-
+// 通知事件
+.notification {
   @color: #136ad5;
   @background: @{color}26;
 
+  .baseRectStyle();
+
   border: 2px solid @color;
   background: @background;
 
-  span[role='img'] {
-    color: @color;
+  // handle common
+  .handleCommon();
+
+  // 上方handle
+  & > div[data-handlepos='top'] {
+    top: -10px;
   }
 
-  :global {
-    .react-flow__handle {
-      border-top-color: @color !important;
+  // 下方handle
+  & > div[data-handlepos='bottom'] {
+    bottom: -13px;
+  }
+
+  & > div[role='border'] {
+    .selectBorder(23px, 17px, -15px, -11px)
+  }
+}
+
+// 顺序优化
+.orderOptimizerNode {
+  @color: #35ce15;
+  @background: @{color}26;
+
+  .baseRectStyle();
+
+  padding: 0 6px;
+  min-width: 10px;
+  width: 70px;
+  height: 100px;
+  border: 2px solid @color;
+  background: @background;
+
+  // handle common
+  .handleCommon();
+
+  // 上方handle
+  & > div[data-handlepos='top'] {
+    top: -10px;
+  }
+
+  // 右上handle
+  & > div[data-handleid="right_out"] {
+    top: 30px;
+    right: -10px;
+
+    & > svg {
+      transform: rotate(270deg);
     }
+  }
+
+  // 右下handle
+  & > div[data-handleid="right_in"] {
+    top: 80px;
+    right: -10px;
+
+    & > svg {
+      transform: rotate(90deg);
+
+      & > polygon {
+        fill: #a4ccf1;
+        stroke: @subTask_color;
+      }
+    }
+  }
+
+  // 下方handle
+  & > div[data-handlepos='bottom'] {
+    bottom: -13px;
+  }
+
+  & > div[role='border'] {
+    .selectBorder(23px, 23px, -15px, -11px)
   }
 }
 
 
-// 条件判断
+// 分支条件
 .conditionContainer {
-  @color: #777777;
+  @color: #800080e6;
 
-  :global {
-    div[class~='react-flow__handle-top'] {
-      border-top-color: #777777;
-      top: -3px;
-    }
+  // handle common
+  .handleCommon();
 
-    div[class~='react-flow__handle-bottom'] {
-      border-top-color: @color;
-      bottom: -17px;
-    }
+  // 上方handle
+  & > div[data-handlepos='top'] {
+    top: -6px;
+  }
 
-    div[class~='react-flow__handle-right'] {
-      border-top: @handle_size solid transparent;
-      border-right: @handle_size solid transparent;
-      border-left: @handle_size solid @color;
-      border-bottom: @handle_size solid transparent;
-      right: -16px;
+  // 下方handle
+  & > div[data-handlepos='bottom'] {
+    bottom: -14px;
+  }
+
+  // 右侧handle
+  & > div[data-handleid='right_out'] {
+    top: 35px;
+    right: -6px;
+
+    & > svg {
+      transform: rotate(270deg);
     }
   }
 }
@@ -247,9 +371,10 @@
   justify-content: center;
   align-items: center;
 
-  .baseSelector();
+  & > div[role='border'] {
+    .selectBorder(23px, 23px, -15px, -11px)
+  }
 }
-
 
 .conditionLabel {
   top: 0;
@@ -261,4 +386,99 @@
   justify-content: center;
   align-items: center;
   font-size: 14px;
+}
+
+// 前置条件
+@prerequisite_color: #76608A;
+
+.prerequisiteLabel {
+  .conditionLabel();
+  color: #ffffff;
+}
+
+.prerequisite {
+  .condition();
+
+  & > svg > path {
+    fill: @prerequisite_color;
+    stroke: #3d3d3d;
+  }
+}
+
+.prerequisiteNode {
+  @handle_border: #0000008c;
+
+  & > div {
+    & > svg {
+      pointer-events: none;
+
+      & > polygon {
+        fill: @prerequisite_color;
+        stroke: @handle_border;
+      }
+    }
+  }
+
+  // 上方handle
+  & > div[data-handleid='top_out'] {
+    top: -14px;
+
+    & > svg {
+      transform: rotate(180deg);
+    }
+  }
+
+  // 下方handle
+  & > div[data-handleid="bottom_in"] {
+    bottom: -13px;
+
+    & > svg {
+      transform: rotate(180deg);
+    }
+  }
+
+  // 左侧handle: tips: 这个节点必须连接前置任务。 此时id的命名规则是: `@[节点类型]`
+  & > div[data-handleid='@predecessorTaskNode'] {
+    left: -6px;
+
+    & > svg {
+      transform: rotate(90deg);
+
+      & > polygon {
+        fill: @preTask_color;
+      }
+    }
+  }
+
+  & > div[role='border'] {
+    .selectBorder(23px, 23px, -15px, -11px)
+  }
+}
+
+
+// 结束节点
+.finishTaskNode {
+  @color: #d80b0b;
+  @background: @{color}26;
+
+  .baseRectStyle();
+
+  min-width: 80px;
+  width: 80px;
+  height: 45px;
+  border: 2px solid @color;
+  background: @background;
+  border-radius: 22px;
+
+  // handle common
+  .handleCommon();
+
+  // 上方handle
+  & > div[data-handlepos='top'] {
+    top: -10px;
+  }
+
+  & > div[role='border'] {
+    .selectBorder(23px, 23px, -15px, -14px)
+  }
 }

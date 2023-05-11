@@ -1,41 +1,54 @@
 import React, {memo} from 'react';
 import {Handle, Position} from 'reactflow';
-import {HandleType} from "../nodeTypes.js";
-import {TaskFlowNodeType} from "../config.js";
-import style from "./nodes.module.less";
+import {HandleType} from '../nodeTypes.js';
+import {TaskFlowNodeType} from '../config.js';
+import style from './nodes.module.less';
 
-const radius = 40
+const radius = 36;
+const strokeWidth = 1.5;
+
+const handleWidth = 24;
+const handleHeight = 16;
 
 const StartNode = (nodeEntity) => {
-    const {data, selected} = nodeEntity
+  const {data, selected} = nodeEntity;
 
-    return (
-        <div className={style.startNode}>
-            <Handle type={HandleType.source} position={Position.Bottom}/>
-            <svg width={radius * 2 + 2} height={radius * 2 + 2}>
-                <circle
-                    r={radius}
-                    cx={radius + 1}
-                    cy={radius + 1}
-                    fill={'transparent'}
-                    stroke="#777777"
-                    strokeWidth="2"
-                />
-            </svg>
+  const bottomPath = `
+        ${strokeWidth / 2}, ${strokeWidth / 2}
+        ${handleWidth / 2}, ${handleHeight - strokeWidth / 2}
+        ${handleWidth - strokeWidth / 2}, ${strokeWidth / 2}
+    `;
 
-            <div className={style.startLabel}>
-                {data.label}
-            </div>
-            {
-                selected && (
-                    <div className={style.selectBorder} style={{
-                        transform: 'scale(1.2, 1.2)'
-                    }}></div>
-                )
-            }
+  return (
+      <div className={style.startNode}>
+        <Handle type={HandleType.source} position={Position.Bottom}>
+          <svg width={handleWidth} height={handleHeight}
+               xmlns="http://www.w3.org/2000/svg">
+            <polygon points={bottomPath} strokeWidth={strokeWidth}
+                     fill="#ffffff"/>
+          </svg>
+        </Handle>
+
+        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width={radius * 4}
+             height={radius * 2}
+             viewBox={`0 0 ${radius * 4} ${radius * 2}`}>
+          <ellipse
+              cx={radius * 2}
+              cy={radius}
+              rx={radius * 2 - strokeWidth / 2}
+              ry={radius - strokeWidth / 2}
+              strokeWidth={strokeWidth}
+          />
+        </svg>
+
+        <div className={style.startLabel}>
+          {data.label}
         </div>
-    )
-}
+
+        {selected && (<div role={'border'}></div>)}
+      </div>
+  );
+};
 export default memo(StartNode);
 
-export const StartNodeType = TaskFlowNodeType.START_NODE
+export const StartNodeType = TaskFlowNodeType.START_NODE;

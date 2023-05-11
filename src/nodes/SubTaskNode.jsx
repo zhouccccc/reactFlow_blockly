@@ -11,11 +11,12 @@ const topHandleHeight = 18;
 const bottomHandleWidth = 16;
 const bottomHandleHeight = 12;
 
-const NotificationDnd = (props) => {
+const leftHandleSize = 16;
+
+const SubTaskDnd = (props) => {
   const {onDragStart} = props;
 
   /**
-   *
    * @type {React.MutableRefObject<HTMLDivElement>}
    */
   const divRef = useRef(null);
@@ -24,7 +25,7 @@ const NotificationDnd = (props) => {
       <div
           draggable
           ref={divRef}
-          className={style.notification}
+          className={style.subTaskNode}
           onDragStart={(event) => {
             // 鼠标的坐标
             const {clientX, clientY} = event;
@@ -32,22 +33,18 @@ const NotificationDnd = (props) => {
             const {x, y} = divRef.current.getBoundingClientRect();
             const offsetX = clientX - x;
             const offsetY = clientY - y;
-            onDragStart(event, {
-              type: NotificationNodeType,
-              label: '通知事件',
-              offsetX,
-              offsetY,
-            });
+            onDragStart(event,
+                {type: SubTaskNodeType, label: '子任务', offsetX, offsetY});
           }}
       >
-        <span role={'label'}>通知事件</span>
+        <span role={'label'}>子任务</span>
       </div>
-
   );
 };
-export default memo(NotificationDnd);
 
-const NotificationNode = (nodeEntity) => {
+export default memo(SubTaskDnd);
+
+const SubTaskNode = (nodeEntity) => {
   const {data, selected} = nodeEntity;
 
   const path1 = `
@@ -68,7 +65,7 @@ const NotificationNode = (nodeEntity) => {
     `;
 
   return (
-      <div className={style.notification}>
+      <div className={style.subTaskNode}>
         <Handle type={HandleType.target} position={Position.Top}>
           <svg width={topHandleWidth} height={topHandleHeight}
                xmlns="http://www.w3.org/2000/svg">
@@ -77,7 +74,8 @@ const NotificationNode = (nodeEntity) => {
           </svg>
         </Handle>
 
-        <Handle type={HandleType.source} position={Position.Bottom}>
+        <Handle id={'bottom_out'} type={HandleType.source}
+                position={Position.Bottom}>
           <svg width={bottomHandleWidth} height={bottomHandleHeight}
                xmlns="http://www.w3.org/2000/svg">
             <polygon points={bottomPath} strokeWidth={strokeWidth}
@@ -85,15 +83,26 @@ const NotificationNode = (nodeEntity) => {
           </svg>
         </Handle>
 
+        {/* tips: 这个节点必须连接前置条件。 此时id的命名规则是: `@[节点类型]` */}
+        <Handle
+            id={`@${TaskFlowNodeType.PREREQUISITE_NODE}`}
+            type={HandleType.source}
+            position={Position.Left}
+        >
+          <svg width={leftHandleSize} height={leftHandleSize}
+               xmlns="http://www.w3.org/2000/svg">
+            <rect x={strokeWidth / 2} y={strokeWidth / 2}
+                  width={leftHandleSize - strokeWidth}
+                  height={leftHandleSize - strokeWidth}/>
+          </svg>
+        </Handle>
+
         <span role={'label'}>{data.label}</span>
-        {
-            selected && (
-                <div role={'border'}/>
-            )
-        }
+        {selected && (<div role={'border'}></div>)}
       </div>
   );
 };
 
-const NotificationNodeType = TaskFlowNodeType.NOTIFICATION_NODE;
-export {NotificationNode, NotificationNodeType};
+const SubTaskNodeType = TaskFlowNodeType.SUB_TASK_NODE;
+
+export {SubTaskNode, SubTaskNodeType};
