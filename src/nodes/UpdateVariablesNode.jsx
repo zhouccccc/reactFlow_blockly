@@ -63,14 +63,14 @@ const UpdateVariablesNode = (nodeEntity) => {
 
 
     return (<div className={style.updateVariablesNode}>
-        <Handle type={HandleType.target} position={Position.Top}>
+        <Handle id={'top_in'} type={HandleType.target} position={Position.Top}>
             <svg width={topHandleWidth} height={topHandleHeight} xmlns="http://www.w3.org/2000/svg">
                 <polygon points={path1} strokeWidth={strokeWidth} fill="#ffffff"/>
                 <polygon points={path2} strokeWidth={strokeWidth} fill="#ffffff"/>
             </svg>
         </Handle>
 
-        <Handle type={HandleType.source} position={Position.Bottom}>
+        <Handle id={'bottom_out'} type={HandleType.source} position={Position.Bottom}>
             <svg width={bottomHandleWidth} height={bottomHandleHeight} xmlns="http://www.w3.org/2000/svg">
                 <polygon points={bottomPath} strokeWidth={strokeWidth} fill="#ffffff"/>
             </svg>

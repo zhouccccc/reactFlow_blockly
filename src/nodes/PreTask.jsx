@@ -2,13 +2,13 @@ import React, {memo, useRef} from 'react';
 import {Handle, Position} from 'reactflow';
 import {HandleType} from '../nodeTypes.js';
 import style from './nodes.module.less';
-import {TaskFlowNodeType} from '../config.js';
+import {HandleConnectStrict, TaskFlowNodeType} from '../config.js';
 
 const strokeWidth = 1;
 const bottomHandleWidth = 18;
 const bottomHandleHeight = 18;
 
-const PredecessorTask = (props) => {
+const PreTask = (props) => {
   const {onDragStart} = props;
 
   /**
@@ -36,7 +36,7 @@ const PredecessorTask = (props) => {
     <span role={'label'}>前置任务</span>
   </div>);
 };
-export default memo(PredecessorTask);
+export default memo(PreTask);
 
 const PredecessorTaskNode = (nodeEntity) => {
   const {data, selected} = nodeEntity;
@@ -55,7 +55,11 @@ const PredecessorTaskNode = (nodeEntity) => {
 
   return (
       <div className={style.preTask}>
-        <Handle type={HandleType.target} position={Position.Bottom}>
+        <Handle
+            id={`@${HandleConnectStrict.TO_PRE_TASK_BOTTOM}`}
+            type={HandleType.target}
+            position={Position.Bottom}
+        >
           <svg width={bottomHandleWidth} height={bottomHandleHeight}
                xmlns="http://www.w3.org/2000/svg">
             <polygon points={path2} strokeWidth={strokeWidth} fill="#ffffff"/>

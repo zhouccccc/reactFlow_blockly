@@ -121,9 +121,8 @@
     bottom: -13px;
   }
 
-  // 左侧handle:
-  // tips: 这个节点必须连接前置条件。 此时id的命名规则是: `@[节点类型]`
-  & > div[data-handleid="@prerequisiteNode"] {
+  // 左侧handle
+  & > div[data-handlepos="left"] {
     left: -9px;
     top: 22px;
 
@@ -420,7 +419,7 @@
   }
 
   // 上方handle
-  & > div[data-handleid='top_out'] {
+  & > div[data-handlepos="top"] {
     top: -14px;
 
     & > svg {
@@ -429,7 +428,7 @@
   }
 
   // 下方handle
-  & > div[data-handleid="bottom_in"] {
+  & > div[data-handlepos="bottom"] {
     bottom: -13px;
 
     & > svg {
@@ -437,8 +436,8 @@
     }
   }
 
-  // 左侧handle: tips: 这个节点必须连接前置任务。 此时id的命名规则是: `@[节点类型]`
-  & > div[data-handleid='@predecessorTaskNode'] {
+  // 左侧handle
+  & > div[data-handlepos="left"] {
     left: -6px;
 
     & > svg {

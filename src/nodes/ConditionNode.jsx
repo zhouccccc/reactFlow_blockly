@@ -73,7 +73,7 @@ const ConditionNode = (nodeEntity) => {
     `;
 
   return (<div className={style.conditionContainer}>
-    <Handle type={HandleType.target} position={Position.Top}>
+    <Handle id={'top_in'} type={HandleType.target} position={Position.Top}>
       <svg width={topHandleWidth} height={topHandleHeight}
            xmlns="http://www.w3.org/2000/svg">
         <polygon points={path1} strokeWidth={strokeWidth} fill="#ffffff"/>

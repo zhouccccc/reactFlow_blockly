@@ -1,7 +1,7 @@
 import React, {memo, useRef} from 'react';
 import {Handle, Position} from 'reactflow';
 import {HandleType} from '../nodeTypes.js';
-import {TaskFlowNodeType} from '../config.js';
+import {HandleConnectStrict, TaskFlowNodeType} from '../config.js';
 import style from './nodes.module.less';
 
 const width = 125;
@@ -73,16 +73,21 @@ const PrerequisiteNode = (nodeEntity) => {
 
   return (
       <div className={style.prerequisiteNode}>
-        <Handle id={'top_out'} type={HandleType.source} position={Position.Top}>
+        {/* tips: 这个节点必须连接前置条件底部Handle */}
+        <Handle
+            id={`@${HandleConnectStrict.TO_PRE_CONDITION_BOTTOM}`}
+            type={HandleType.source}
+            position={Position.Top}
+        >
           <svg width={topHandleWidth} height={topHandleHeight}
                xmlns="http://www.w3.org/2000/svg">
             <polygon points={topPath} strokeWidth={strokeWidth}/>
           </svg>
         </Handle>
 
-        {/* tips: 这个节点必须连接前置任务。 此时id的命名规则是: `@[节点类型]` */}
+        {/* tips: 这个节点必须连接前置任务的底部Handle */}
         <Handle
-            id={`@${TaskFlowNodeType.PREDECESSOR_TASK_NODE}`}
+            id={`@${HandleConnectStrict.TO_PRE_TASK_BOTTOM}`}
             type={HandleType.source}
             position={Position.Left}
         >
@@ -92,8 +97,12 @@ const PrerequisiteNode = (nodeEntity) => {
           </svg>
         </Handle>
 
-        <Handle id={'bottom_in'} type={HandleType.target}
-                position={Position.Bottom}>
+        {/* tips: 能连接该handle的必须是子任务的左Handle */}
+        <Handle
+            id={`@${HandleConnectStrict.TO_PRE_CONDITION_BOTTOM}`}
+            type={HandleType.target}
+            position={Position.Bottom}
+        >
           <svg width={bottomHandleWidth} height={bottomHandleHeight}
                xmlns="http://www.w3.org/2000/svg">
             <polygon points={path1} strokeWidth={strokeWidth}/>

@@ -33,10 +33,10 @@ import StandbyDnd, {
 } from './nodes/StandbyNode.jsx';
 import PredecessorTaskDnd, {
   PredecessorTaskNode, PredecessorTaskNodeType,
-} from './nodes/PredecessorTask.jsx';
+} from './nodes/PreTask.jsx';
 import PrerequisiteDnd, {
   PrerequisiteNode, PrerequisiteNodeType,
-} from './nodes/Prerequisite.jsx';
+} from './nodes/PreCondition.jsx';
 import ButtonEdge from './ButtonEdge.jsx';
 import {getRandomString} from './utils.js';
 import {Button, Drawer, Form, Input, message} from 'antd';
@@ -162,9 +162,8 @@ const App = () => {
       }
 
       // 针对特别连接限制，比如前置条件左出线必须连接前置任务
-      if (sourceHandle.startsWith('@')) {
-        const targetNodeType = sourceHandle.replace('@', '');
-        if (!target.endsWith(`_${targetNodeType}`)) {
+      if (sourceHandle.startsWith('@') || targetHandle.startsWith('@')) {
+        if (sourceHandle !== targetHandle) {
           return eds;
         }
       }
@@ -324,74 +323,76 @@ const App = () => {
     return false;
   }
 
-  return (<div className={style.app}>
-    <ReactFlowProvider>
-      <div className={style.left}>
-        <SubTaskDnd onDragStart={onDragStart}/>
-        <PredecessorTaskDnd onDragStart={onDragStart}/>
-        <UpdateVariablesDnd onDragStart={onDragStart}/>
-        <SwitchTaskDnd onDragStart={onDragStart}/>
-        <StandbyDnd onDragStart={onDragStart}/>
-        <NotificationDnd onDragStart={onDragStart}/>
-        <ConditionOptimizerDnd onDragStart={onDragStart}/>
-        <ConditionDnd onDragStart={onDragStart}/>
-        <PrerequisiteDnd onDragStart={onDragStart}/>
-        <FinishDnd onDragStart={onDragStart}/>
-      </div>
+  return (
+      <div className={style.app}>
+        <ReactFlowProvider>
+          <div className={style.left}>
+            <SubTaskDnd onDragStart={onDragStart}/>
+            <PredecessorTaskDnd onDragStart={onDragStart}/>
+            <UpdateVariablesDnd onDragStart={onDragStart}/>
+            <SwitchTaskDnd onDragStart={onDragStart}/>
+            <StandbyDnd onDragStart={onDragStart}/>
+            <NotificationDnd onDragStart={onDragStart}/>
+            <ConditionOptimizerDnd onDragStart={onDragStart}/>
+            <ConditionDnd onDragStart={onDragStart}/>
+            <PrerequisiteDnd onDragStart={onDragStart}/>
+            <FinishDnd onDragStart={onDragStart}/>
+          </div>
 
-      <div className={style.canvas} ref={reactFlowWrapper}>
-        <ReactFlow
-            fitView
-            snapToGrid
-            minZoom={1}
-            snapGrid={[5, 5]}
-            nodes={nodes}
-            edges={edges}
-            nodeTypes={nodeTypes}
-            edgeTypes={edgeTypes}
-            onInit={onInit}
-            onConnect={onConnect}
-            onNodesChange={onNodesChange}
-            onEdgesChange={onEdgesChange}
-            onDrop={onDrop}
-            onDragOver={onDragOver}
-            onEdgeUpdate={onEdgeUpdate}
-            onEdgeUpdateStart={onEdgeUpdateStart}
-            onEdgeUpdateEnd={onEdgeUpdateEnd}
-            onEdgeMouseEnter={onEdgeMouseEnter}
-            onEdgeMouseLeave={onEdgeMouseLeave}
-            onSelectionChange={onSelectionChange}
-            onNodesDelete={onNodesDelete}
-            defaultEdgeOptions={defaultEdgeOptions}
-            proOptions={proOptions}
-            deleteKeyCode={null} // 禁用删除快捷键
+          <div className={style.canvas} ref={reactFlowWrapper}>
+            <ReactFlow
+                fitView
+                snapToGrid
+                minZoom={1}
+                snapGrid={[5, 5]}
+                nodes={nodes}
+                edges={edges}
+                nodeTypes={nodeTypes}
+                edgeTypes={edgeTypes}
+                onInit={onInit}
+                onConnect={onConnect}
+                onNodesChange={onNodesChange}
+                onEdgesChange={onEdgesChange}
+                onDrop={onDrop}
+                onDragOver={onDragOver}
+                onEdgeUpdate={onEdgeUpdate}
+                onEdgeUpdateStart={onEdgeUpdateStart}
+                onEdgeUpdateEnd={onEdgeUpdateEnd}
+                onEdgeMouseEnter={onEdgeMouseEnter}
+                onEdgeMouseLeave={onEdgeMouseLeave}
+                onSelectionChange={onSelectionChange}
+                onNodesDelete={onNodesDelete}
+                defaultEdgeOptions={defaultEdgeOptions}
+                proOptions={proOptions}
+                deleteKeyCode={null} // 禁用删除快捷键
+            >
+              <Controls/>
+              <Background/>
+            </ReactFlow>
+          </div>
+        </ReactFlowProvider>
+
+        <Drawer
+            mask={false}
+            maskClosable={false}
+            closable={false}
+            title="节点编辑"
+            placement="right"
+            open={!!nodeSelection}
         >
-          <Controls/>
-          <Background/>
-        </ReactFlow>
+          <div style={{textAlign: 'end'}}>
+            {showDeleteBtn() && (<Button danger type={'primary'}
+                                         onClick={deleteNode}>删除</Button>)}
+            <Button type={'primary'} onClick={editConfirm}>确定</Button>
+          </div>
+          <Form form={form}>
+            <Form.Item name={'label'} label={'节点名称'}>
+              <Input/>
+            </Form.Item>
+          </Form>
+        </Drawer>
       </div>
-    </ReactFlowProvider>
-
-    <Drawer
-        mask={false}
-        maskClosable={false}
-        closable={false}
-        title="节点编辑"
-        placement="right"
-        open={!!nodeSelection}
-    >
-      <div style={{textAlign: 'end'}}>
-        {showDeleteBtn() && (<Button danger type={'primary'}
-                                     onClick={deleteNode}>删除</Button>)}
-        <Button type={'primary'} onClick={editConfirm}>确定</Button>
-      </div>
-      <Form form={form}>
-        <Form.Item name={'label'} label={'节点名称'}>
-          <Input/>
-        </Form.Item>
-      </Form>
-    </Drawer>
-  </div>);
+  );
 };
 
 export default App;

@@ -21,7 +21,7 @@ const StartNode = (nodeEntity) => {
 
   return (
       <div className={style.startNode}>
-        <Handle type={HandleType.source} position={Position.Bottom}>
+        <Handle id={'bottom_out'} type={HandleType.source} position={Position.Bottom}>
           <svg width={handleWidth} height={handleHeight}
                xmlns="http://www.w3.org/2000/svg">
             <polygon points={bottomPath} strokeWidth={strokeWidth}

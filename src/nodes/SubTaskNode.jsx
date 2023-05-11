@@ -2,7 +2,7 @@ import React, {memo, useRef} from 'react';
 import {Handle, Position} from 'reactflow';
 import {HandleType} from '../nodeTypes.js';
 import style from './nodes.module.less';
-import {TaskFlowNodeType} from '../config.js';
+import {HandleConnectStrict, TaskFlowNodeType} from '../config.js';
 
 const strokeWidth = 1;
 const topHandleWidth = 18;
@@ -66,7 +66,7 @@ const SubTaskNode = (nodeEntity) => {
 
   return (
       <div className={style.subTaskNode}>
-        <Handle type={HandleType.target} position={Position.Top}>
+        <Handle id={'top_in'} type={HandleType.target} position={Position.Top}>
           <svg width={topHandleWidth} height={topHandleHeight}
                xmlns="http://www.w3.org/2000/svg">
             <polygon points={path1} strokeWidth={strokeWidth} fill="#ffffff"/>
@@ -83,9 +83,9 @@ const SubTaskNode = (nodeEntity) => {
           </svg>
         </Handle>
 
-        {/* tips: 这个节点必须连接前置条件。 此时id的命名规则是: `@[节点类型]` */}
+        {/* tips: 这个节点必须连接前置条件的底部Handle */}
         <Handle
-            id={`@${TaskFlowNodeType.PREREQUISITE_NODE}`}
+            id={`@${HandleConnectStrict.TO_PRE_CONDITION_BOTTOM}`}
             type={HandleType.source}
             position={Position.Left}
         >

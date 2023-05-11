@@ -69,7 +69,7 @@ const NotificationNode = (nodeEntity) => {
 
   return (
       <div className={style.notification}>
-        <Handle type={HandleType.target} position={Position.Top}>
+        <Handle id={'top_in'} type={HandleType.target} position={Position.Top}>
           <svg width={topHandleWidth} height={topHandleHeight}
                xmlns="http://www.w3.org/2000/svg">
             <polygon points={path1} strokeWidth={strokeWidth} fill="#ffffff"/>
@@ -77,7 +77,7 @@ const NotificationNode = (nodeEntity) => {
           </svg>
         </Handle>
 
-        <Handle type={HandleType.source} position={Position.Bottom}>
+        <Handle id={'bottom_out'} type={HandleType.source} position={Position.Bottom}>
           <svg width={bottomHandleWidth} height={bottomHandleHeight}
                xmlns="http://www.w3.org/2000/svg">
             <polygon points={bottomPath} strokeWidth={strokeWidth}

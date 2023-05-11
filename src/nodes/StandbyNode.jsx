@@ -56,7 +56,7 @@ const StandbyNode = (nodeEntity) => {
 
   return (
       <div className={style.standbyNode}>
-        <Handle type={HandleType.target} position={Position.Bottom}>
+        <Handle id={'bottom_in'} type={HandleType.target} position={Position.Bottom}>
           <svg width={bottomHandleWidth} height={bottomHandleHeight}
                xmlns="http://www.w3.org/2000/svg">
             <polygon points={path2} strokeWidth={strokeWidth} fill="#ffffff"/>

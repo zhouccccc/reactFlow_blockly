@@ -63,7 +63,7 @@ const OrderOptimizerNode = (nodeEntity) => {
 
 
     return (<div className={style.orderOptimizerNode}>
-        <Handle type={HandleType.target} position={Position.Top}>
+        <Handle id={'top_in'} type={HandleType.target} position={Position.Top}>
             <svg width={topHandleWidth} height={topHandleHeight} xmlns="http://www.w3.org/2000/svg">
                 <polygon points={topPath1} strokeWidth={strokeWidth} fill="#ffffff"/>
                 <polygon points={topPath2} strokeWidth={strokeWidth} fill="#ffffff"/>
